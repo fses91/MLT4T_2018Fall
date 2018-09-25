@@ -174,7 +174,7 @@ def test_optimization(inputs, outputs, description, grader):
         with time_limit(seconds_per_test_case):
             # * Find optimal allocations  		   	  			    		  		  		    	 		 		   		 		  
             student_allocs, student_cr, student_adr, student_sddr, student_sr = optimization.optimize_portfolio(
-                sd=start_date, ed=end_date, syms=symbols, gen_plot=False)
+                sd=start_date, ed=end_date, syms=symbols, gen_plot=True)
             student_allocs = np.float32(
                 student_allocs)  # make sure it's a NumPy array, for easier computation
 

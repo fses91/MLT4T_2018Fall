@@ -59,10 +59,12 @@ def optimize_portfolio(sd=dt.datetime(2008, 1, 1), ed=dt.datetime(2009, 1, 1), \
     prices = prices_all[syms]  # only portfolio symbols  		   	  			    		  		  		    	 		 		   		 		  
     prices_SPY = prices_all['SPY']  # only SPY, for comparison later
 
-    prices_normed = prices / prices.ix[0, :]
+    normed_prices = prices / prices.ix[0, :]
+    normed_prices_SPY = prices_SPY / prices_SPY.ix[0, :]
+
     initial_guess = np.full(len(syms), 1.0 / len(syms))
     result = spo.minimize(error_fuc, initial_guess,
-                          args=(prices_normed),
+                          args=(normed_prices),
                           method='SLSQP',
                           bounds=[(0, 1) for _ in syms],
                           tol=0.000001,
@@ -89,7 +91,9 @@ def optimize_portfolio(sd=dt.datetime(2008, 1, 1), ed=dt.datetime(2009, 1, 1), \
     # Compare daily portfolio value with SPY using a normalized plot  		   	  			    		  		  		    	 		 		   		 		  
     if gen_plot:
         # add code to plot here  		   	  			    		  		  		    	 		 		   		 		  
-        df_temp = pd.concat([port_val, prices_SPY], keys=['Portfolio', 'SPY'], axis=1)
+        df_temp = pd.concat([allocated / allocated.ix[0], normed_prices_SPY], keys=['Portfolio', 'SPY'], axis=1)
+        df_temp.plot()
+        plt.show()
         pass
 
     return allocations, cr, adr, sddr, sr
